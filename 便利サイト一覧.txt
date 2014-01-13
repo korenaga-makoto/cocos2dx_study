@@ -12,3 +12,9 @@ http://www.cocos2d-x.org/reference/native-cpp/V2.2/index.html
 
 効果音作成支援サイト
 http://www.bfxr.net/
+
+Texture Packer
+http://www.codeandweb.com/texturepacker
+
+Physics Editor
+http://www.codeandweb.com/physicseditor

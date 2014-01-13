@@ -31,8 +31,9 @@ CCFiniteTimeAction* Animation::catStartAction()
     CCSkewTo* skew2 = CCSkewTo::create( 0.2, -1, 0 );
     CCSequence* seq = CCSequence::createWithTwoActions( skew1, skew2 );
     CCRepeat* repeat = CCRepeat::create( seq, 10 );
+    CCHide* hide = CCHide::create();
     
-    return repeat;
+    return CCSequence::createWithTwoActions( repeat, hide );
 }
 
 CCFiniteTimeAction* Animation::vibrationAnimation()
@@ -202,3 +203,13 @@ CCFiniteTimeAction* Animation::moveFromRightToCenter( float time )
     return action;
 }
 
+CCFiniteTimeAction* Animation::catEndAction()
+{
+    CCShow* show = CCShow::create();
+    CCSkewTo* skew1 = CCSkewTo::create( 0.2, 1, 0 );
+    CCSkewTo* skew2 = CCSkewTo::create( 0.2, -1, 0 );
+    CCSequence* seq = CCSequence::createWithTwoActions( skew1, skew2 );
+    CCRepeat* repeat = CCRepeat::create( seq, 10000 );
+    
+    return CCSequence::createWithTwoActions( show, repeat );
+}

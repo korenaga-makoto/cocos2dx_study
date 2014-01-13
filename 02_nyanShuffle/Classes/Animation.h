@@ -35,6 +35,8 @@ public:
     static CCFiniteTimeAction* moveFromCenterToRight( float time );
     static CCFiniteTimeAction* moveFromRightToLeft( float time );
     static CCFiniteTimeAction* moveFromRightToCenter( float time );
+    
+    static CCFiniteTimeAction* catEndAction();
 };
 
 #endif /* defined(__nyanshuffle__Animation__) */

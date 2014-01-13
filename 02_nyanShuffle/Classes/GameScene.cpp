@@ -201,7 +201,7 @@ void GameScene::shufflePattern1( float time )
     
     // 中央から左へ
     CCMenuItemSprite* centerBox = getCenterBox();
-    leftBox->runAction( Animation::moveFromCenterToLeft( time ) );
+    centerBox->runAction( Animation::moveFromCenterToLeft( time ) );
     
     // 左と中央のタグを変更
     leftBox->setTag( kBoxLocation_Center );
@@ -228,4 +228,125 @@ void GameScene::shufflePattern3( float time )
 {
     // 中央から右へ
     CCMenuItemSprite* centorBox = getCenterBox();
+    centorBox->runAction( Animation::moveFromCenterToRight( time ) );
+    
+    // 右から中央へ
+    CCMenuItemSprite* rightBox = getRightBox();
+    rightBox->runAction( Animation::moveFromRightToCenter( time ) );
+    
+    // 中央と右のタグを変更
+    centorBox->setTag( kBoxLocation_Right );
+    rightBox->setTag( kBoxLocation_Center );
+    
+}
+
+void GameScene::shufflePattern4( float time )
+{
+    // 左から右へ
+    CCMenuItemSprite* leftBox = getLeftBox();
+    leftBox->runAction( Animation::moveFromLeftToRight( time ) );
+    
+    // 中央から左へ
+    CCMenuItemSprite* centerBox = getCenterBox();
+    centerBox->runAction( Animation::moveFromCenterToLeft( time ) );
+    
+    // 右から中央へ
+    CCMenuItemSprite* rightBox = getRightBox();
+    rightBox->runAction( Animation::moveFromRightToCenter( time ) );
+    
+    // タグを変更
+    leftBox->setTag( kBoxLocation_Right );
+    centerBox->setTag( kBoxLocation_Left );
+    rightBox->setTag( kBoxLocation_Center );
+}
+
+void GameScene::shufflePattern5( float time )
+{
+    // 左から中央へ
+    CCMenuItemSprite* leftBox = getLeftBox();
+    leftBox->runAction( Animation::moveFromLeftToCenter( time ) );
+    
+    // 中央から右へ
+    CCMenuItemSprite* centerBox = getCenterBox();
+    centerBox->runAction( Animation::moveFromCenterToRight( time ) );
+    
+    // 右から左へ
+    CCMenuItemSprite* rightBox = getRightBox();
+    rightBox->runAction( Animation::moveFromRightToLeft( time ) );
+    
+    // タグを変更
+    leftBox->setTag( kBoxLocation_Center );
+    centerBox->setTag( kBoxLocation_Right );
+    rightBox->setTag( kBoxLocation_Left );
+}
+
+void GameScene::boxesShuffle( float time )
+{
+    m_totalShuffleTime += time;
+    
+    // 箱がアクション中は、処理を抜ける
+    if ( m_pBox1->getActionByTag( TAG_ACTION )
+        || m_pBox2->getActionByTag( TAG_ACTION )
+        || m_pBox3->getActionByTag( TAG_ACTION ) )
+    {
+        return;
+    }
+    
+    // 5秒経過した場合は、シャッフル終了
+    if ( m_totalShuffleTime > 5 )
+    {
+        this->unschedule( schedule_selector( GameScene::boxesShuffle ) );
+        this->scheduleOnce( schedule_selector( GameScene::afterShuffle ), 0.2 );
+        return;
+    }
+    
+    const float shuffleTime = 0.5;
+    float activeShufflingTime;
+    
+    // シャッフル時間の指定
+    switch ( rand() % 5 )
+    {
+        case 0:
+            activeShufflingTime = shuffleTime * 0.90;
+            break;
+        case 1:
+            activeShufflingTime = shuffleTime * 0.95;
+            break;
+        case 2:
+            activeShufflingTime = shuffleTime * 1.00;
+            break;
+        case 3:
+            activeShufflingTime = shuffleTime * 1.05;
+            break;
+        default:
+            activeShufflingTime = shuffleTime * 1.10;
+            break;
+    }
+    
+    // シャッフルパターンの指定
+    switch ( rand() % 5 )
+    {
+        case 0:
+            shufflePattern1( activeShufflingTime );
+            break;
+        case 1:
+            shufflePattern2( activeShufflingTime );
+            break;
+        case 2:
+            shufflePattern3( activeShufflingTime );
+            break;
+        case 3:
+            shufflePattern4( activeShufflingTime );
+            break;
+        default:
+            shufflePattern5( activeShufflingTime );
+            break;
+    }
+}
+
+void GameScene::afterShuffle()
+{
+    // ネコの表示
+    m_pCat->setPosition( m_pBox2->getPosition() );
+    m_pCat->runAction( Animation::catEndAction() );
 }
